@@ -1,32 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//components são modularização de elementos 
-//function component, recebe uma propriedade na entrada e retorna um elemento React
-//componentes começam com letras maiúsculas
-//components devem agir como funçoes puras(não alterar seu input)
-function BemVindo(props){
-    return (
-        <h1>
-            Olá {props.name}
-        </h1>
-    );
-}
-//class component, literalmente a mesma coisa, mas classes tem outras features 
-class BienVenido extends React.Component{
-    render(){
-        return <h1>Olá, {this.props.name}</h1>;
+//classes componentes tem features como local state e métodos de ciclo de vida
+class Clock extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {date: new Date()}
+    }
+
+    componentDidMount(){
+        this.timer = setInterval(
+                ()=>this.tick(),
+                1000
+            );
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.timer);
+    }
+
+    tick(){
+        this.setState({
+            date: new Date()
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>Olá novamente</h1>
+                <h2>Agora são{this.state.date.toLocaleTimeString()}</h2>
+            </div>
+        );
     }
 }
-
-function App() {
-    return (
-      <div>
-        <BemVindo name="Caio" />
-        <BemVindo name="Ronaldo" />
-        <BemVindo name="Neymar" />
-      </div>
-    );
-  }
-
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(
+    <Clock/>,
+    document.getElementById('root')
+);
