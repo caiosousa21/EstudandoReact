@@ -20,6 +20,8 @@ class Toggle extends React.Component {
 
         this.handleClick = this.handleClick;
     }
+
+    //bindando callback por campo de classe, se eu apenas chamasse a função eu deveria então bindar no construtor (this.handleClick.bind(this)) 
     handleClick = () => {
         this.setState(state => ({
             isToggleOn: !state.isToggleOn
