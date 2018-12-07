@@ -1,42 +1,76 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function Actionlink() {
-    function handleClick(e) {
-        e.preventDefault();
-        console.log('link clickado');
-    }
-    return (
-        <a href="#" onClick={handleClick}>
-            Clickme
-        </a>
-    );
-}
-
-class Toggle extends React.Component {
+class LoginControl extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isToggleOn: true };
-
-        this.handleClick = this.handleClick;
+        this.handleLoginClick = this.handleLoginClick;
+        this.handleLogoutClick = this.handleLogoutClick;
+        this.state = {isLoggedIn:false};
     }
 
-    //bindando callback por campo de classe, se eu apenas chamasse a função eu deveria então bindar no construtor (this.handleClick.bind(this)) 
-    handleClick = () => {
-        this.setState(state => ({
-            isToggleOn: !state.isToggleOn
-        }));
+    handleLoginClick=()=>{
+        this.setState({isLoggedIn:true});
     }
-    render() {
-        return (
-                <button onClick={this.handleClick}>
-                    {this.state.isToggleOn ? 'On' : 'Off'}
-                </button>
+
+    handleLogoutClick=()=>{
+        this.setState({isLoggedIn:false});
+    }
+
+    render(){
+        const isLoggedIn = this.state.isLoggedIn;
+        let button;
+
+        if(isLoggedIn){
+            button = <LogoutButton onClick={this.handleLogoutClick}/>
+        }else{
+            button = <LoginButton onClick={this.handleLoginClick}/>
+        }
+
+        return(
+            <div>
+                <Receber isLoggedIn={isLoggedIn}/>
+                {button}
+            </div>
         );
     }
 }
 
+function LoginButton(props) {
+    return (
+      <button onClick={props.onClick}>
+        Login
+      </button>
+    );
+  }
+  
+  function LogoutButton(props) {
+    return (
+      <button onClick={props.onClick}>
+        Logout
+      </button>
+    );
+  }
+
+function BemVindoU(props) {
+    const caio = props.caio;
+    return <h1>Bem Vindo {caio}!</h1>;
+}
+
+function BemVindoV() {
+    return <h1>Registre-se</h1>;
+}
+function Receber(props) {
+    const isLoggedIn = props.isLoggedIn;
+    const caio = props.caio;
+    if (isLoggedIn) {
+        console.log(props);
+        return <BemVindoU caio={caio} />;
+    }
+    return <BemVindoV />;
+}
+
 ReactDOM.render(
-    <Toggle/>,
+    <LoginControl/>,
     document.getElementById('root')
 );
