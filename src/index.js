@@ -1,57 +1,98 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class MeuForm extends React.Component {
-    constructor(props){
+function VereditoEbulicao(props) {
+    if (props.celsius >= 100) {
+        return <p>Ponto de ebulição alcançado.</p>
+    }
+    return <p>Ainda não :c</p>
+}
+
+const nomeEscala = {
+    c: 'Celsius',
+    f: 'Fahrenheit'
+};
+
+class TemperaturaEntrada extends React.Component {
+    constructor(props) {
         super(props);
-        this.state = {valor: '', valor1:'Nome: ', sabor:'caio', texto:'Isso não faz nada.'};
-        this.handleChange = this.handleChange;
-        this.handleSubmit = this.handleSubmit;
     }
 
-    handleChange=(e)=>{
-        this.setState({valor: e.target.value});
+    handleChange =(e)=>  {
+        console.log(e);
+        this.props.onTemperatureChange(e.target.value);
     }
 
-    handleSubmit=(e)=>{
-        alert('CAIO: ' + this.state.sabor);
-        this.setState({valor1: this.state.valor});
-        this.setState({sabor: this.state.sabor});
-        e.preventDefault();
-    }
-
-    mudaSabor=(e)=>{
-        this.setState({sabor: e.target.value});
-    }
-
-    
-    //JSX obrigatoriamente precisa de um event handler no onChange do elemento, se não o elemento é inmutável
     render() {
+        const temperature = this.props.temperature;
+        const escala = this.props.scale;
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    {this.state.valor1}
-                    <br/>
-                    <input type='text' value={this.state.valor} onChange={this.handleChange}/>
-                    <br/>
-                    <select value={this.state.sabor} onChange={this.mudaSabor}>
-                        <option value='neymar'>Ney</option>
-                        <option value='uau'>...</option>
-                        <option value='caio'>CAIO</option>
-                    </select>
-                    <br/>
-                    <textarea value={this.state.texto}/>
-                </label>
-                <br/>
-                <input type='submit' value='Submit'/>
-            </form>    
+            <fieldset>
+                <legend>Insira uma temperatura em {nomeEscala[escala]}: </legend>
+                <input
+                    value={temperature}
+                    onChange={this.handleChange} />
+            </fieldset>
         );
     }
 }
 
+function pCelsius(fahrenheit) {
+    return (fahrenheit - 32) * 5 / 9;
+}
 
+function pFahrenheit(celsius) {
+    return (celsius * 9 / 5) + 32;
+}
+
+function Converter(temperature, convert) {
+    const input = parseFloat(temperature);
+    if (Number.isNaN(input)) {
+        return '';
+    }
+    const output = convert(input);
+    const rounded = Math.round(output * 1000) / 1000;
+    return rounded.toString();
+}
+
+class Calculando extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {temperature:'', scale:'c'}
+    }
+
+    handleCelsiusChange=(temperature)=>{
+        this.setState({scale:'c', temperature});
+    }
+
+    handleFahrenheitChange=(temperature)=>{
+        this.setState({scale:'f', temperature});
+    }
+
+    render() {
+        const scale = this.state.scale;
+        const temperature = this.state.temperature;
+        const celsius = scale === 'f' ? Converter(temperature, pCelsius) : temperature; 
+        const fahrenheit = scale === 'c' ? Converter(temperature, pFahrenheit) : temperature;
+
+        return (
+            <div>
+                <TemperaturaEntrada
+                    scale='c'
+                    temperature={celsius}
+                    onTemperatureChange = {this.handleCelsiusChange} />
+                <TemperaturaEntrada
+                    scale='f'
+                    temperature={fahrenheit}
+                    onTemperatureChange = {this.handleFahrenheitChange} />
+                <VereditoEbulicao
+                    celsius={parseFloat(celsius)}/>
+            </div>
+        );
+    }
+}
 
 ReactDOM.render(
-    <MeuForm />,
+    <Calculando />,
     document.getElementById('root')
 );
