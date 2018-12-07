@@ -1,98 +1,99 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function VereditoEbulicao(props) {
-    if (props.celsius >= 100) {
-        return <p>Ponto de ebulição alcançado.</p>
-    }
-    return <p>Ainda não :c</p>
+
+
+function BordaChique(props) {
+    return (
+        <div className={'FancyBorder FancyBorder-' + props.color}>
+            {props.children}
+        </div>
+    );
 }
 
-const nomeEscala = {
-    c: 'Celsius',
-    f: 'Fahrenheit'
-};
+function Dialogo(props) {
+    return (
+        <BordaChique color='blue'>
+            <h1 className='Dialog=title'>
+                {props.title}
+            </h1>
+            <p className='Dialog-message'>
+                {props.message}
+            </p>
+            {props.children}
+        </BordaChique>
+    );
+}
 
-class TemperaturaEntrada extends React.Component {
+// function DialogoBemV(){
+//     return(
+//         <Dialogo
+//             title='Bem vindo'
+//             message='Obrigado pela visita'
+//         />
+//     );
+// }
+
+class DialogoInscricao extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {login: '' };
     }
-
-    handleChange =(e)=>  {
-        console.log(e);
-        this.props.onTemperatureChange(e.target.value);
-    }
-
     render() {
-        const temperature = this.props.temperature;
-        const escala = this.props.scale;
         return (
-            <fieldset>
-                <legend>Insira uma temperatura em {nomeEscala[escala]}: </legend>
+            <Dialogo
+                title='Bem vindo'
+                message='Obrigado pela visita'>
                 <input
-                    value={temperature}
-                    onChange={this.handleChange} />
-            </fieldset>
+                    value={this.state.login}
+                    onChange={this. handleChange} />
+                <button
+                    onClick={this.handleInscricao}>
+                    Me inscrever
+            </button>
+            </Dialogo>
         );
     }
-}
 
-function pCelsius(fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9;
-}
-
-function pFahrenheit(celsius) {
-    return (celsius * 9 / 5) + 32;
-}
-
-function Converter(temperature, convert) {
-    const input = parseFloat(temperature);
-    if (Number.isNaN(input)) {
-        return '';
+    handleChange=(e)=> {
+        this.setState({login: e.target.value});
     }
-    const output = convert(input);
-    const rounded = Math.round(output * 1000) / 1000;
-    return rounded.toString();
-}
-
-class Calculando extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {temperature:'', scale:'c'}
-    }
-
-    handleCelsiusChange=(temperature)=>{
-        this.setState({scale:'c', temperature});
-    }
-
-    handleFahrenheitChange=(temperature)=>{
-        this.setState({scale:'f', temperature});
-    }
-
-    render() {
-        const scale = this.state.scale;
-        const temperature = this.state.temperature;
-        const celsius = scale === 'f' ? Converter(temperature, pCelsius) : temperature; 
-        const fahrenheit = scale === 'c' ? Converter(temperature, pFahrenheit) : temperature;
-
-        return (
-            <div>
-                <TemperaturaEntrada
-                    scale='c'
-                    temperature={celsius}
-                    onTemperatureChange = {this.handleCelsiusChange} />
-                <TemperaturaEntrada
-                    scale='f'
-                    temperature={fahrenheit}
-                    onTemperatureChange = {this.handleFahrenheitChange} />
-                <VereditoEbulicao
-                    celsius={parseFloat(celsius)}/>
-            </div>
-        );
+    handleInscricao=()=> {
+        alert(`Bem vindo ${this.state.login}!`);
     }
 }
+
+
+//exemplo de componente quebrado
+// function Separa(props){
+//     return(
+//         <div className='Separa'>
+//             <div className='Separa-esquerda'>
+//                 {props.left};
+//             </div>
+//             <div className='Separa-direita'>
+//                 {props.direita};
+//             </div>
+//         </div>
+//     );
+// }
+
+// function App(){
+//     return(
+//         <Separa
+//             esquerda={
+//                 <Contatos/>
+//             }        
+//             direita={
+//                 <Chat/>
+//             }/>
+//     );
+// }
 
 ReactDOM.render(
-    <Calculando />,
+    <DialogoInscricao />,
     document.getElementById('root')
 );
+
+
+
