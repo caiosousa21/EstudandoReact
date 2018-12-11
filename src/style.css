@@ -1,0 +1,47 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+    background-color: aliceblue;
+  }
+  
+
+  .board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+  
+  .status {
+  }
+  
+  .square {
+    float: left; 
+    height: 50px;
+    width: 50px;
+    background-color: burlywood;
+    border: solid 1px;
+  }
+  
+  .square:focus {
+    outline: none;
+  }
+  
+  .kbd-navigation .square:focus {
+    background: #ddd;
+  }
+  
+  .game {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .game-info {
+    margin-top: 100px;
+  }
+
+  .btnJump{
+      border:none;
+      width: 160px;
+      background-color: slateblue;
+  }
+  
