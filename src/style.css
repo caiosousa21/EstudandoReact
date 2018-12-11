@@ -20,6 +20,7 @@ body {
     width: 50px;
     background-color: burlywood;
     border: solid 1px;
+    
   }
   
   .square:focus {
@@ -43,5 +44,6 @@ body {
       border:none;
       width: 160px;
       background-color: slateblue;
+      cursor: pointer;
   }
   
